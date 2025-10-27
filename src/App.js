@@ -2,14 +2,13 @@ import { Console } from "@woowacourse/mission-utils";
 import { NAME_MAX_LEN } from "./constants.js";
 import setCarNames from "./io/setCarNames.js";
 import setTryCount from "./io/setTryCount.js";
-import printGameProgress from "./io/printGameProgress.js";
 import printWinners from "./io/printWinners.js";
 import splitString from "./utils/splitString.js";
 import validateCarNames from "./validation/validateCarNames.js";
 import validateTryCount from "./validation/validateTryCount.js";
 import createCarsState from "./racing/createCarsState.js";
-import raceOneRound from "./racing/raceOneRound.js";
 import getWinners from "./racing/getWinners.js";
+import printCurrentState from "./io/printCurrentState.js";
 
 class App {
   async run() {
@@ -25,17 +24,9 @@ class App {
       let carsState = createCarsState(carNames);
 
       Console.print("실행 결과");
-
-      for (let i = 0; i < tryCount; i ++) {
-        carsState = raceOneRound(carsState);
-
-        carsState.forEach((carState) => {
-          Console.print(printGameProgress(carState));
-        });
-      }
+      carsState = printCurrentState(tryCount, carsState);
 
       const winners = getWinners(carsState);
-
       Console.print(printWinners(winners));
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
